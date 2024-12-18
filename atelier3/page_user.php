@@ -2,8 +2,8 @@
 // Démarrer la session
 session_start();
 
-// Vérifier si l'utilisateur s'est bienconnecté
-if (!isset($_SESSION['loggedin']) || $_SESSION['user_type'] !== 'admin') {
+// Vérifier si l'utilisateur s'est bien connecté
+if (!isset($_SESSION['loggedin']) || $_SESSION['user_type'] !== 'user') {
     header('Location: index.php'); // Dans le cas contraire, l'utilisateur sera redirigé vers la page de connexion
     exit();
 }

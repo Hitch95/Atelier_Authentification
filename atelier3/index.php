@@ -4,23 +4,37 @@ session_start();
 
 // Vérifier si l'utilisateur est déjà connecté
 if (isset($_SESSION['loggedin']) && $_SESSION['loggedin'] === true) {
-    header('Location: page_admin.php'); // Si l'utilisateur s'est déjà connecté alors il sera automatiquement redirigé vers la page protected.php
-    exit();
+    if ($_SESSION['user_type'] === 'admin') {
+        header('Location: page_admin.php'); // Si l'utilisateur s'est déjà connecté en tant qu'admin alors il sera automatiquement redirigé vers la page page_admin.php
+        exit();
+    } elseif ($_SESSION['user_type'] === 'user') {
+        header('Location: page_user.php'); // Si l'utilisateur s'est déjà connecté en tant qu'utilisateur alors il sera automatiquement redirigé vers la page page_user.php
+        exit();
+    }
 }
 
-// Gérer le formulaire de connexion
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     $username = $_POST['username'];
     $password = $_POST['password'];
 
-    // Vérification simple des identifiants (à améliorer avec une base de données)
+    // Vérification
     if ($username === 'admin' && $password === 'secret') {
         // Stocker les informations utilisateur dans la session
         $_SESSION['loggedin'] = true;
         $_SESSION['username'] = $username;
+        $_SESSION['user_type'] = 'admin';
 
-        // Rediriger vers la page protégée
+        // Rediriger vers la page admin
         header('Location: page_admin.php');
+        exit();
+    }  elseif ($username === 'user' && $password === 'utilisateur') {
+        // Stocker les informations utilisateur dans la session
+        $_SESSION['loggedin'] = true;
+        $_SESSION['username'] = $username;
+        $_SESSION['user_type'] = 'user';
+
+        // Rediriger vers la page user
+        header('Location: page_user.php');
         exit();
     } else {
         $error = "Nom d'utilisateur ou mot de passe incorrect.";
