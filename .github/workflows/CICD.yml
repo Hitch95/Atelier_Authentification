@@ -1,10 +1,5 @@
 name: Industrialisation continue sur le serveur Alwaysdata
-
-on: 
-  push:
-    branches:
-      - main
-
+on: push
 jobs:
   Connexion:
     runs-on: ubuntu-latest
@@ -17,7 +12,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd $HOME/www/
-            
+
   Copy:
     needs: Connexion
     runs-on: ubuntu-latest
@@ -41,7 +36,7 @@ jobs:
               exit 1
             fi
 
-  Create-file:
+  Update-htpasswd:
     needs: Copy
     runs-on: ubuntu-latest
     steps:
