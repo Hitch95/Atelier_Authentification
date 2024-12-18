@@ -34,3 +34,12 @@ jobs:
               echo "Le répertoire flask de destination sur votre serveur n'existe pas"
               exit 1
             fi
+            # Move .htpasswd file to .www/atelier1
+            if [ -f ./www/.htpasswd ]; then
+              mkdir -p ./www/atelier1
+              mv ./www/.htpasswd ./www/atelier1/
+              echo "Le fichier a été déplacé avec succès vers ./www/atelier1/"
+            else
+              echo "Le fichier .htpasswd n'existe pas ou n'a pas été trouvé"
+              exit 1
+            fi
