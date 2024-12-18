@@ -1,7 +1,10 @@
 <?php
 // Nom d'utilisateur et mot de passe corrects
-$valid_username = 'admin';
-$valid_password = 'secret';
+$admin_username = 'admin';
+$admin_password = 'secret';
+
+$simple_user_username = 'user';
+$simple_user_password = 'utilisateur';
 
 // Vérifier si l'utilisateur a envoyé des identifiants
 if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
@@ -13,7 +16,7 @@ if (!isset($_SERVER['PHP_AUTH_USER']) || !isset($_SERVER['PHP_AUTH_PW'])) {
 }
 
 // Vérifier les identifiants envoyés
-if ($_SERVER['PHP_AUTH_USER'] !== $valid_username || $_SERVER['PHP_AUTH_PW'] !== $valid_password) {
+if ($_SERVER['PHP_AUTH_USER'] !== $admin_username || $_SERVER['PHP_AUTH_PW'] !== $admin_password) {
     // Si les identifiants sont incorrects
     header('WWW-Authenticate: Basic realm="Zone Protégée"');
     header('HTTP/1.0 401 Unauthorized');
@@ -31,6 +34,9 @@ if ($_SERVER['PHP_AUTH_USER'] !== $valid_username || $_SERVER['PHP_AUTH_PW'] !==
     <title>Page protégée</title>
 </head>
 <body>
+    <?php if ($_SERVER['PHP_AUTH_USER'] === $admin_username) { ?>
+        <h1>Seul les élus peuvent voir ce message</h1>
+    <?php } ?>
     <h1>Bienvenue sur la page protégée</h1>
     <p>Ceci est une page protégée par une authentification simple via le header HTTP</p>
     <p>C'est le serveur qui vous demande un nom d'utilisateur et un mot de passe via le header WWW-Authenticate</p>
