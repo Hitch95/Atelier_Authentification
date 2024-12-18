@@ -1,21 +1,11 @@
 name: Industrialisation continue sur le serveur Alwaysdata
 
-on:
+on: 
   push:
     branches:
       - main
 
 jobs:
-  create-file:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v4
-
-      - name: Create .htpasswd file
-        run: |
-          echo "${{ secrets.HTPASSWD_CONTENT }}" > .htpasswd
-
   Connexion:
     runs-on: ubuntu-latest
     steps:
@@ -27,6 +17,7 @@ jobs:
           password: ${{ secrets.PASSWORD }}
           script: |
             cd $HOME/www/
+            
   Copy:
     needs: Connexion
     runs-on: ubuntu-latest
@@ -49,12 +40,17 @@ jobs:
               echo "Le répertoire flask de destination sur votre serveur n'existe pas"
               exit 1
             fi
-            # Move .htpasswd file to .www/atelier1
-            if [ -f ./www/.htpasswd ]; then
-              mkdir -p ./www/atelier1
-              mv ./www/.htpasswd ./www/atelier1/
-              echo "Le fichier a été déplacé avec succès vers ./www/atelier1/"
-            else
-              echo "Le fichier .htpasswd n'existe pas ou n'a pas été trouvé"
-              exit 1
-            fi
+
+  Create-file:
+    needs: Copy
+    runs-on: ubuntu-latest
+    steps:
+      - name: Connexion SSH et mise à jour htpasswd
+        uses: appleboy/ssh-action@master
+        with:
+          host: "ssh-${{ secrets.USERNAME }}.alwaysdata.net"
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          script: |
+            cd $HOME/www/atelier1
+            echo '${{ secrets.HTPASSWD_CONTENT }}' > .htpasswd
