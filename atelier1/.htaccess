@@ -1,4 +1,4 @@
 AuthName "Accès protégé"
 AuthType Basic
-AuthUserFile /home/moufidi/www/.htpasswd
+AuthUserFile /home/moufidi/www/atelier1/.htpasswd
 Require valid-user
